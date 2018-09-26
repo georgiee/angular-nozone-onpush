@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { PushyComponent } from './pushy/pushy.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PushyComponent
   ],
   imports: [
     BrowserModule

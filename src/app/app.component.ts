@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ApplicationRef } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'nozone-test';
+  constructor(private app: ApplicationRef) { }
+  setTitle(useTick = false) {
+    console.log('setTitle1', this.title);
+    this.title = this.currentDate;
+
+    if (useTick) {
+      this.app.tick();
+    }
+  }
+  get currentDate() {
+    return new Date() + '';
+  }
 }
