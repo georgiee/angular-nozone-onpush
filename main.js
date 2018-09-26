@@ -41,7 +41,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "let's push\n<app-pushy #pushy [title1]=\"title\"></app-pushy>\n\n\n<button style=\"background-color:springgreen\" (click)=\"title = currentDate\">through binding</button>\n<button style=\"background-color:peachpuff\" (click)=\"pushy.setTitle2(currentDate)\">through method</button>"
+module.exports = "let's push\n<app-pushy #pushy [title1]=\"title\"></app-pushy>\n\n<button style=\"background-color:springgreen\" (click)=\"setTitle()\">through binding</button>\n<button style=\"background-color:springgreen\" (click)=\"setTitle(true)\">through binding (tick)</button>\n<button style=\"background-color:peachpuff\" (click)=\"pushy.setTitle2(currentDate)\">through method</button>\n<button style=\"background-color:powderblue\" (click)=\"pushy.setTitle4(currentDate)\">through method (+tick)</button>\n<button style=\"background-color:powderblue\" (click)=\"pushy.setTitle5(currentDate)\">through method (+tick +cdr)</button>\n"
 
 /***/ }),
 
@@ -62,11 +62,23 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent() {
+    function AppComponent(app) {
+        this.app = app;
         this.title = 'nozone-test';
     }
+    AppComponent.prototype.setTitle = function (useTick) {
+        if (useTick === void 0) { useTick = false; }
+        console.log('setTitle1', this.title);
+        this.title = this.currentDate;
+        if (useTick) {
+            this.app.tick();
+        }
+    };
     Object.defineProperty(AppComponent.prototype, "currentDate", {
         get: function () {
             return new Date() + '';
@@ -79,7 +91,8 @@ var AppComponent = /** @class */ (function () {
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
-        })
+        }),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ApplicationRef"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -153,7 +166,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>pushy</h1>\n<span style=\"background-color:springgreen\">title1: {{_title1}}</span><br>\n<span style=\"background-color:peachpuff\">title2: {{_title2}}</span><br>\n<span style=\"background-color:hotpink\">title3: {{_title3}}</span><br>\n\n<hr>\n\n<button\n  style=\"background-color:hotpink\"\n  (click)=\"setTitle3(currentDate)\">internal click</button>"
+module.exports = "<h1>pushy</h1>\n<span style=\"background-color:springgreen\">title1: {{_title1}}</span><br>\n<span style=\"background-color:peachpuff\">title2: {{_title2}}</span><br>\n<span style=\"background-color:hotpink\">title3: {{_title3}}</span><br>\n<span style=\"background-color:powderblue\">title4: {{_title4}}</span><br>\n\n<hr>\n\n<button\n  style=\"background-color:hotpink\"\n  (click)=\"setTitle3(currentDate)\">internal click</button>"
 
 /***/ }),
 
@@ -179,14 +192,18 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 };
 
 var PushyComponent = /** @class */ (function () {
-    function PushyComponent() {
+    function PushyComponent(app, cd) {
+        this.app = app;
+        this.cd = cd;
         this._title1 = 'unknown';
         this._title2 = 'unknown';
         this._title3 = 'unknown';
+        this._title4 = 'unknown';
     }
     Object.defineProperty(PushyComponent.prototype, "title1", {
         set: function (value) {
             this._title1 = value;
+            console.log('this._title1', this._title1);
         },
         enumerable: true,
         configurable: true
@@ -200,9 +217,22 @@ var PushyComponent = /** @class */ (function () {
     });
     PushyComponent.prototype.setTitle2 = function (value) {
         this._title2 = value;
+        console.log('this._title2', this._title2);
     };
     PushyComponent.prototype.setTitle3 = function (value) {
         this._title3 = value;
+        console.log('this._title3', this._title3);
+    };
+    PushyComponent.prototype.setTitle4 = function (value) {
+        this._title4 = value;
+        console.log('this._title4', this._title4);
+        this.app.tick();
+    };
+    PushyComponent.prototype.setTitle5 = function (value) {
+        this._title4 = value;
+        console.log('this._title4', this._title4);
+        this.app.tick();
+        this.cd.markForCheck();
     };
     PushyComponent.prototype.ngOnInit = function () {
     };
@@ -225,7 +255,7 @@ var PushyComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./pushy.component.css */ "./src/app/pushy/pushy.component.css")],
             changeDetection: _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectionStrategy"].OnPush
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ApplicationRef"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"]])
     ], PushyComponent);
     return PushyComponent;
 }());
